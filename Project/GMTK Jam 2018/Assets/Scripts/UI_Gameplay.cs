@@ -68,4 +68,9 @@ public class UI_Gameplay : MonoBehaviour
 			instance = this;
 		}
 	}
+
+	private void Update()
+	{
+		
+	}
 }

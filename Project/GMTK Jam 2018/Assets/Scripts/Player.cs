@@ -126,6 +126,10 @@ public class Player : MonoBehaviour
 
 	private IEnumerator OnFart()
 	{
+		GameObject obj = Instantiate(Resources.Load("Hazard") as GameObject, transform.position, Quaternion.identity);
+		Hazard hazard = obj.GetComponent<Hazard>();
+		
+		
 		float f = Fart;
 		float timer = 0.5f;
 		float t = 0.0f;

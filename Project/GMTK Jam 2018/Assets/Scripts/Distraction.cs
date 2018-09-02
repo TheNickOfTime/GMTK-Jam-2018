@@ -13,8 +13,6 @@ public class Distraction : MonoBehaviour
 	public DistractionType distractionType;
 
 	public float distractionAmount = 10.0f;
-	
-	public AnimationCurve falloff = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
 	public float radius;
 

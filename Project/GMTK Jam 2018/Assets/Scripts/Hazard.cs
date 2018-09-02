@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
-	private const float decayRate = 1;
+	private const float decayRate = 3;
 	
 	public float smell;
 	public float noise;
+
+	public float radius;
+
+	private void Awake()
+	{
+		radius = GetComponent<CircleCollider2D>().bounds.extents.x;
+	}
 
 	private void Update()
 	{

@@ -30,7 +30,7 @@ public class Interaction : MonoBehaviour
         }
         if (collision.gameObject.tag == "Trash" )
         {
-            trash.SetActive(true);
+            //trash.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Debug.Log("I farted near the trashcan.");
@@ -42,7 +42,7 @@ public class Interaction : MonoBehaviour
         }
         if (collision.gameObject.tag == "Plant")
         {
-            plant.SetActive(true);
+            //plant.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Debug.Log("I've pooped in the plant!");            
@@ -54,7 +54,7 @@ public class Interaction : MonoBehaviour
         }
         if (collision.gameObject.tag == "Dog")
         {
-            dog.SetActive(true);
+            //dog.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Debug.Log("I'm blaming my farts on Spike here.");            

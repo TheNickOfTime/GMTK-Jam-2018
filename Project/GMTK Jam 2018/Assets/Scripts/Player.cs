@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
@@ -12,8 +13,8 @@ public class Player : MonoBehaviour
 	
 	//Values-----------------------------------------------------------------------------------------------------------/
 	private bool m_IsMoving;
-	
-	
+
+    [SerializeField] private GameObject gameOverMenu;
 	//Stats------------------------------------------------------------------------------------------------------------/
 	//Player
 	[SerializeField] private float m_MoveSpeed = 1;
@@ -113,6 +114,7 @@ public class Player : MonoBehaviour
 	private void Start()
 	{
 		NextFart();
+        Time.timeScale = 1.0f;
 	}
 
 	private void Update()
@@ -121,7 +123,8 @@ public class Player : MonoBehaviour
 		UpdateUI();
 		FartBuildup();
 		EnvironmentDetection();
-		
+        GameOverScreen();
+
 		m_Anim.SetBool("IsWalking", m_IsMoving);
 	}
 
@@ -306,4 +309,27 @@ public class Player : MonoBehaviour
 		m_StinkCurrent = stench;
 		m_NoiseCurrent = noise;
 	}
+
+    public void GameOverScreen()
+    {
+        if (m_CloutCurrent <= 0)
+        {
+            Time.timeScale = 0.0f;
+            gameOverMenu.SetActive(true);
+        }
+        else
+        {
+            gameOverMenu.SetActive(false);
+        }
+    }
+
+    public void LoadScene(string scene)
+    {
+        SceneManager.LoadScene(scene);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

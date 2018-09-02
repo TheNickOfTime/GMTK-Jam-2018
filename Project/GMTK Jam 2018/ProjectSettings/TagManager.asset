@@ -49,3 +49,9 @@ TagManager:
   - name: Interactive
     uniqueID: 3108485225
     locked: 0
+  - name: Smell
+    uniqueID: 412171483
+    locked: 0
+  - name: Sound
+    uniqueID: 1295352481
+    locked: 0

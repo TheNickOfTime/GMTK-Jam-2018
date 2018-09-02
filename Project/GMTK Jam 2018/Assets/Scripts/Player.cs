@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
 	private enum FartNoise
 	{
 		Silent,
-		Noticable,
+		Audible,
 		Loud
 	}
 	private FartNoise m_FartNoise;
@@ -187,7 +187,7 @@ public class Player : MonoBehaviour
 			case FartNoise.Silent:
 				noiseDeficit -= 5;
 				break;
-			case FartNoise.Noticable:
+			case FartNoise.Audible:
 				noiseDeficit -= 35;
 				break;
 			case FartNoise.Loud:
@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
 			case FartNoise.Silent:
 				hazard.noise = 5;
 				break;
-			case FartNoise.Noticable:
+			case FartNoise.Audible:
 				hazard.noise = 35;
 				break;
 			case FartNoise.Loud:

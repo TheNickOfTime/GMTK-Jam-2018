@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 {
 	//Components & References------------------------------------------------------------------------------------------/
 	private Rigidbody2D m_Rig;
+	private Animator m_Anim;
 	
 	//Values-----------------------------------------------------------------------------------------------------------/
 	private bool m_IsMoving;
@@ -72,7 +73,7 @@ public class Player : MonoBehaviour
 	
 	private enum FartSmell
 	{
-		Unsmellable,
+		Odorless,
 		Smelly,
 		Putrid
 	}
@@ -94,10 +95,16 @@ public class Player : MonoBehaviour
 	}
 	private FartWetness m_FartWetness;
 	
+	//Audio------------------------------------------------------------------------------------------------------------/
+	[SerializeField] private AudioClip m_LoudFart;
+	[SerializeField] private AudioClip m_MediumFart;
+	[SerializeField] private AudioClip m_SoftFart;
+	
 	private void Awake()
 	{
 		//Assign References
 		m_Rig = GetComponent<Rigidbody2D>();
+		m_Anim = GetComponent<Animator>();
 		
 		//Set Values
 		m_CloutCurrent = m_CloutMax;
@@ -114,6 +121,8 @@ public class Player : MonoBehaviour
 		UpdateUI();
 		FartBuildup();
 		EnvironmentDetection();
+		
+		m_Anim.SetBool("IsWalking", m_IsMoving);
 	}
 
 	private void PlayerInput()
@@ -141,13 +150,25 @@ public class Player : MonoBehaviour
 		{
 			StartCoroutine(OnFart());
 		}
-		
 	}
 
 	private IEnumerator OnFart()
 	{	
 		SpawnHazard();
 		DetermineClout();
+
+		switch (m_FartNoise)
+		{
+			case FartNoise.Silent:
+				AudioSource.PlayClipAtPoint(m_SoftFart, transform.position);
+				break;
+			case FartNoise.Audible:
+				AudioSource.PlayClipAtPoint(m_MediumFart, transform.position);
+				break;
+			case FartNoise.Loud:
+				AudioSource.PlayClipAtPoint(m_LoudFart, transform.position);
+				break;
+		}
 		
 		float f = Fart;
 		float timer = 0.5f;
@@ -169,7 +190,7 @@ public class Player : MonoBehaviour
 		float stinkDeficit = m_StinkCurrent;
 		switch (m_FartSmell)
 		{
-			case FartSmell.Unsmellable:
+			case FartSmell.Odorless:
 				stinkDeficit -= 5;
 				break;
 			case FartSmell.Smelly:
@@ -208,7 +229,7 @@ public class Player : MonoBehaviour
 
 		switch (m_FartSmell)
 		{
-			case FartSmell.Unsmellable:
+			case FartSmell.Odorless:
 				hazard.smell = 5;
 				break;
 			case FartSmell.Smelly:

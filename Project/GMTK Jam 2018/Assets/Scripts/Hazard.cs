@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
-	private const float decayRate = 3;
+	private const float decayRate = 2;
 	
 	public float smell;
 	public float noise;

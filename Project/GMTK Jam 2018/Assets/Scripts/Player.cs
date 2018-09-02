@@ -196,6 +196,7 @@ public class Player : MonoBehaviour
 		}
 
 		float loss = stinkDeficit + noiseDeficit;
+		loss *= loss > 0 ? 0.2f : 1;
 
 		Clout += loss;
 	}

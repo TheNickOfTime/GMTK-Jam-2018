@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Plate
+  - Trash
+  - Plant
+  - Dog
+  - Stereo
   layers:
   - Default
   - TransparentFX
@@ -14,7 +19,7 @@ TagManager:
   - 
   - 
   - Environment
-  - 
+  - Interactive
   - 
   - 
   - 
@@ -40,4 +45,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Interactive
+    uniqueID: 3108485225
     locked: 0

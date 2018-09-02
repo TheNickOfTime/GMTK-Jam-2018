@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class Player : MonoBehaviour
 	private Rigidbody2D m_Rig;
 	
 	//Values-----------------------------------------------------------------------------------------------------------/
-	[SerializeField] private bool m_IsMoving;
+	private bool m_IsMoving;
 	
 	
 	//Stats------------------------------------------------------------------------------------------------------------/
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour
 		}
 		set
 		{
-			m_FartCurrent = value;
+			m_FartCurrent = Mathf.Clamp(value, 0, 100);
 		}
 	}
 	private float m_CloutCurrent;
@@ -39,17 +41,35 @@ public class Player : MonoBehaviour
 		}
 		set
 		{
-			m_CloutCurrent = value;
+			m_CloutCurrent = Mathf.Clamp(value, 0, 100);
 		}
 	}
 	
 	//Environment
 	[SerializeField] private float m_StenchMax = 100;
 	private float m_StinkCurrent;
+	public float Stink
+	{
+		set
+		{
+			m_StinkCurrent = Mathf.Clamp(value, 0, 100);
+
+		}
+	}
+	
 	[SerializeField] private float m_NoiseMax = 100;
 	private float m_NoiseCurrent;
+	public float Noise
+	{
+		set
+		{
+			m_NoiseCurrent = Mathf.Clamp(value, 0, 100);
+		}
+	}
 	
 	//Farts
+	public AnimationCurve m_Falloff = AnimationCurve.EaseInOut(0, 1, 1, 0);
+	
 	private enum FartSmell
 	{
 		Unsmellable,
@@ -125,10 +145,9 @@ public class Player : MonoBehaviour
 	}
 
 	private IEnumerator OnFart()
-	{
-		GameObject obj = Instantiate(Resources.Load("Hazard") as GameObject, transform.position, Quaternion.identity);
-		Hazard hazard = obj.GetComponent<Hazard>();
-		
+	{	
+		SpawnHazard();
+		DetermineClout();
 		
 		float f = Fart;
 		float timer = 0.5f;
@@ -145,13 +164,81 @@ public class Player : MonoBehaviour
 		NextFart();
 	}
 
+	private void DetermineClout()
+	{
+		float stinkDeficit = m_StinkCurrent;
+		switch (m_FartSmell)
+		{
+			case FartSmell.Unsmellable:
+				stinkDeficit -= 5;
+				break;
+			case FartSmell.Smelly:
+				stinkDeficit -= 35;
+				break;
+			case FartSmell.Putrid:
+				stinkDeficit -= 70;
+				break;
+		}
+		
+		
+		float noiseDeficit = m_NoiseCurrent;
+		switch (m_FartNoise)
+		{
+			case FartNoise.Silent:
+				noiseDeficit -= 5;
+				break;
+			case FartNoise.Noticable:
+				noiseDeficit -= 35;
+				break;
+			case FartNoise.Loud:
+				noiseDeficit -= 70;
+				break;
+		}
+
+		float loss = stinkDeficit + noiseDeficit;
+
+		Clout += loss;
+	}
+
+	private void SpawnHazard()
+	{
+		GameObject obj = Instantiate(Resources.Load("Hazard") as GameObject, transform.position, Quaternion.identity);
+		Hazard hazard = obj.GetComponent<Hazard>();
+
+		switch (m_FartSmell)
+		{
+			case FartSmell.Unsmellable:
+				hazard.smell = 5;
+				break;
+			case FartSmell.Smelly:
+				hazard.smell = 35;
+				break;
+			case FartSmell.Putrid:
+				hazard.smell = 70;
+				break;
+		}
+
+		switch (m_FartNoise)
+		{
+			case FartNoise.Silent:
+				hazard.noise = 5;
+				break;
+			case FartNoise.Noticable:
+				hazard.noise = 35;
+				break;
+			case FartNoise.Loud:
+				hazard.noise = 70;
+				break;
+		}
+	}
+
 	private void NextFart()
 	{
 		m_FartSmell = (FartSmell) Random.Range(0, System.Enum.GetValues(typeof(FartSmell)).Length);
 		m_FartNoise = (FartNoise) Random.Range(0, System.Enum.GetValues(typeof(FartNoise)).Length);
 		m_FartWetness = (FartWetness) Random.Range(0, System.Enum.GetValues(typeof(FartWetness)).Length);
 
-		UI_Gameplay.instance.NextFart = "A " + m_FartSmell + ", " + m_FartNoise + ", but " + m_FartWetness + " fart.";
+		UI_Gameplay.instance.NextFart = "A " + m_FartSmell + ", but " + m_FartNoise + /*", but " + m_FartWetness +*/ " fart.";
 	}
 
 	private void EnvironmentDetection()
@@ -166,7 +253,7 @@ public class Player : MonoBehaviour
 			if (distraction != null)
 			{
 				float dist = Vector2.Distance(transform.position, distraction.transform.position);
-				float falloff = distraction.falloff.Evaluate(dist / distraction.radius );
+				float falloff = m_Falloff.Evaluate(dist / distraction.radius );
 				float output = distraction.distractionAmount * falloff;
 				
 				switch (distraction.distractionType)
@@ -178,6 +265,18 @@ public class Player : MonoBehaviour
 						case Distraction.DistractionType.Noise:
 							noise += output;
 							break;
+				}
+			}
+			else
+			{
+				Hazard hazard = obj.transform.GetComponent<Hazard>();
+				if (hazard != null)
+				{
+					float dist = Vector2.Distance(transform.position, hazard.transform.position);
+					float falloff = m_Falloff.Evaluate(dist / hazard.radius );
+					
+					stench -= hazard.smell * falloff;
+					noise -= hazard.noise * falloff;
 				}
 			}
 		}

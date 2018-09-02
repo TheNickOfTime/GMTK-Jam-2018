@@ -2,14 +2,14 @@
 
 ## Credits:
 
-#### -Garry McGee-
-Level Design
+#### Garry McGee
+Level Design, Scripting
 
-#### -Nick Cunningham-
-Mechanic Design, Programming
+#### Nick Cunningham
+Mechanic Design, Scripting
 
-#### -Elijah Mazur-
+#### Elijah Mazur
 Environment & Character Art, Animation
 
-#### -Daniel Yum-
+#### Daniel Yum
 Character Art, Animation

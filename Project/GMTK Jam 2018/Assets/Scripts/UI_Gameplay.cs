@@ -16,6 +16,7 @@ public class UI_Gameplay : MonoBehaviour
 		set
 		{
 			m_FartMeter.value = value;
+			m_FartMeter.transform.Find("Text").GetComponent<Text>().text = (value * 100).ToString("N0") + "%";
 		}
 	}
 
@@ -25,6 +26,7 @@ public class UI_Gameplay : MonoBehaviour
 		set
 		{
 			m_CloutMeter.value = value;
+			m_CloutMeter.transform.Find("Text").GetComponent<Text>().text = (value * 100).ToString("N0") + "%";
 		}
 	}
 
@@ -44,6 +46,7 @@ public class UI_Gameplay : MonoBehaviour
 		set
 		{
 			m_StenchMeter.value = value;
+			m_StenchMeter.transform.Find("Text").GetComponent<Text>().text = (value * 100).ToString("N0") + "%";
 		}
 	}
 
@@ -53,6 +56,7 @@ public class UI_Gameplay : MonoBehaviour
 		set
 		{
 			m_NoiseMeter.value = value;
+			m_NoiseMeter.transform.Find("Text").GetComponent<Text>().text = (value * 100).ToString("N0") + "%";
 		}
 	}
 
